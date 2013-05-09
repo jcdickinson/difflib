@@ -301,12 +301,7 @@ namespace DiffLib
             if (right == null) throw new ArgumentNullException("right");
 
             var matches = RecurseMatches(left, right, 0, 0, left.Count, right.Count, 10);
-            var any = false;
-            foreach (var item in CollapseSequences(matches))
-            {
-                any = true;
-                yield return item;
-            }
+            return CollapseSequences(matches);
         }
 
     }
