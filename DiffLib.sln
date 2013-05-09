@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiffLib", "DiffLib\DiffLib.csproj", "{770E6B4D-010B-4DEE-A683-D4AC315A891D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiffLib.Specifications", "DiffLib.Specifications\DiffLib.Specifications.csproj", "{B868DFC0-258B-4972-948F-B9F37EC0F434}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{770E6B4D-010B-4DEE-A683-D4AC315A891D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{770E6B4D-010B-4DEE-A683-D4AC315A891D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{770E6B4D-010B-4DEE-A683-D4AC315A891D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{770E6B4D-010B-4DEE-A683-D4AC315A891D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B868DFC0-258B-4972-948F-B9F37EC0F434}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B868DFC0-258B-4972-948F-B9F37EC0F434}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B868DFC0-258B-4972-948F-B9F37EC0F434}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B868DFC0-258B-4972-948F-B9F37EC0F434}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
