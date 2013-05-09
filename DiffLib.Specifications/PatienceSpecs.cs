@@ -9,7 +9,7 @@ namespace DiffLib.Specifications
 {
     class Patience
     {
-        protected static readonly Differencer<string> Differ = new Differencer<string>(new PatienceLcs<string>(StringComparer.Ordinal));
+        protected static readonly Differencer<string> Differ = new PatienceSequenceMatcher<string>(StringComparer.Ordinal).CreateDifferencer();
 
         protected static string[] Lines(params string[] param) { return param; }
 
@@ -17,15 +17,9 @@ namespace DiffLib.Specifications
         {
             return Differ.FindDifferences(left, right).ToArray();
         }
-
-        protected static string[] DiffFormat(string[] left, string[] right, int contextLines = 3)
-        {
-            var formatter = new StandardDiffFormatter<string>(x => x, contextLines);
-            return formatter.Format(left, right, Diff(left, right)).Split(new string[] { Environment.NewLine }, StringSplitOptions.None);
-        }
     }
 
-    [Subject(typeof(PatienceLcs<>))]
+    [Subject(typeof(PatienceSequenceMatcher<>))]
     class when_diffing_a_file_that_adds_a_new_line : Patience
     {
         static string[] left;
@@ -52,7 +46,7 @@ namespace DiffLib.Specifications
             instructions[1].ShouldEqual(new DifferenceInstruction(DifferenceOperation.Inserted, new SubSequence(0, 1, 0, 1)));
     }
 
-    [Subject(typeof(PatienceLcs<>))]
+    [Subject(typeof(PatienceSequenceMatcher<>))]
     class when_diffing_a_file_that_removes_a_new_line : Patience
     {
         static string[] left;
@@ -79,7 +73,7 @@ namespace DiffLib.Specifications
             instructions[1].ShouldEqual(new DifferenceInstruction(DifferenceOperation.Removed, new SubSequence(1, 0, 1, 0)));
     }
 
-    [Subject(typeof(PatienceLcs<>))]
+    [Subject(typeof(PatienceSequenceMatcher<>))]
     class when_diffing_a_file_that_changes_and_adds_a_new_line : Patience
     {
         static string[] left;

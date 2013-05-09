@@ -11,10 +11,11 @@ namespace DiffLib
     /// algorithm.
     /// </summary>
     /// <typeparam name="T">The type of item within the sequences.</typeparam>
-    public sealed class PatienceLcs<T> : ISequenceMatcher<T>
+    [SequenceMatcher("Patience")]
+    public sealed class PatienceSequenceMatcher<T> : ISequenceMatcher<T>
     {
         #region Patience LCS
-        private class Card
+        private sealed class Card
         {
             public int BackReference;
             public readonly int Value;
@@ -25,7 +26,7 @@ namespace DiffLib
             }
         }
 
-        private class Pile : List<Card>, IComparable<Pile>
+        private sealed class Pile : List<Card>, IComparable<Pile>
         {
             public Pile(Card card)
                 : base(1)
@@ -86,19 +87,19 @@ namespace DiffLib
         private readonly IEqualityComparer<T> _equality;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PatienceLcs{T}"/> class.
+        /// Initializes a new instance of the <see cref="PatienceSequenceMatcher{T}"/> class.
         /// </summary>
-        public PatienceLcs()
+        public PatienceSequenceMatcher()
             : this(null)
         {
 
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="PatienceLcs{T}"/> class.
+        /// Initializes a new instance of the <see cref="PatienceSequenceMatcher{T}"/> class.
         /// </summary>
         /// <param name="comparer">The comparer.</param>
-        public PatienceLcs(IEqualityComparer<T> comparer)
+        public PatienceSequenceMatcher(IEqualityComparer<T> comparer)
         {
             _equality = comparer ?? EqualityComparer<T>.Default;
         }
@@ -121,12 +122,12 @@ namespace DiffLib
             // set index[line in a] = position of line in a unless
             // a is a duplicate, in which case it's set to None
 
-            var index = new Dictionary<T, int?>(_equality);
+            var index = new Dictionary<T, int>(_equality);
             for (var i = 0; i < a.Count; i++)
             {
                 var line = a[i];
                 if (index.ContainsKey(line))
-                    index[line] = null;
+                    index[line] = -1;
                 else
                     index[line] = i;
             }
@@ -136,36 +137,37 @@ namespace DiffLib
             // in which case it's set to None
             // conversely create atob (don't worry about the None)
 
-            var btoa = new int?[b.Count];
+            var btoa = new int[b.Count];
             var atob = new int[a.Count];
             var index2 = new Dictionary<T, int>(_equality);
             for (var i = 0; i < b.Count; i++)
             {
+                btoa[i] = -1;
                 var line = b[i];
 
-                int? next;
-                index.TryGetValue(line, out next);
-                if (next.HasValue)
+                int next;
+                if (index.TryGetValue(line, out next) && next != -1)
                 {
-                    if (index2.ContainsKey(line))
+                    int btoai;
+                    if (index2.TryGetValue(line, out btoai) && btoai != -1)
                     {
-                        btoa[index2[line]] = null;
-                        index[line] = null;
+                        btoa[btoai] = -1;
+                        index[line] = -1;
                     }
                     else
                     {
                         index2[line] = i;
-                        btoa[i] = next.Value;
-                        atob[next.Value] = i;
+                        btoa[i] = next;
+                        atob[next] = i;
                     }
                 }
             }
 
-            return PatienceBackreferenceLcs(btoa.Where(x => x.HasValue).Select(x => x.Value)).Select(x => Tuple.Create(x, atob[x])).Reverse();
+            return PatienceBackreferenceLcs(btoa.Where(x => x != -1)).Select(x => Tuple.Create(x, atob[x])).Reverse();
         }
 
         /// <summary>
-        /// Recursively applies <see cref="PatienceLcs"/> to two lists.
+        /// Recursively applies <see cref="PatienceSequenceMatcher"/> to two lists.
         /// </summary>
         /// <param name="a">The first list.</param>
         /// <param name="b">The second list.</param>
@@ -177,11 +179,9 @@ namespace DiffLib
         /// <returns>The resulting subsequences.</returns>
         private IEnumerable<Tuple<int, int>> RecurseMatches(IList<T> a, IList<T> b, int aLow, int bLow, int aHigh, int bHigh, int maxRecursion)
         {
-            if (maxRecursion < 0) yield break;
+            if (maxRecursion < 0 || aLow >= aHigh || bLow >= bHigh) yield break;
 
             var ct = 0;
-            if (aLow >= aHigh || bLow >= bHigh) yield break;
-
             var lastAPos = aLow - 1;
             var lastBPos = bLow - 1;
 

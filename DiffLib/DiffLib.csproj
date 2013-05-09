@@ -41,7 +41,7 @@
     <Compile Include="IDifferenceFormatter.cs" />
     <Compile Include="IDifferenceSimplifier.cs" />
     <Compile Include="ISequenceMatcher.cs" />
-    <Compile Include="PatienceDiff.cs" />
+    <Compile Include="PatienceSequenceMatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StandardDiffFormatter.cs" />
     <Compile Include="SubList.cs" />
