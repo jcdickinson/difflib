@@ -67,6 +67,11 @@ namespace DiffLib
                         yield return new DifferenceInstruction(DifferenceOperation.Removed,
                             new SubSequence(lastLeftIndex, 0, diff, 0));
                 }
+                else if (item.LeftIndex > 0 && item.RightIndex == 0)
+                {
+                    yield return new DifferenceInstruction(DifferenceOperation.Removed,
+                        new SubSequence(0, 0, item.LeftLength, 0));
+                }
 
                 if (lastRightIndex != -1)
                 {
@@ -74,6 +79,11 @@ namespace DiffLib
                     if (diff > 0)
                         yield return new DifferenceInstruction(DifferenceOperation.Inserted,
                             new SubSequence(0, lastRightIndex, 0, diff));
+                }
+                else if (item.RightIndex > 0 && item.LeftIndex == 0)
+                {
+                    yield return new DifferenceInstruction(DifferenceOperation.Inserted,
+                        new SubSequence(0, 0, 0, item.RightIndex));
                 }
 
                 if (item.LeftLength > 0 && item.LeftLength == item.RightLength)
@@ -95,8 +105,9 @@ namespace DiffLib
             if (lastRightIndex < right.Count)
             {
                 if (lastRightIndex < 0) lastRightIndex = 0;
+                if (lastLeftIndex < 0) lastLeftIndex = 0;
                 yield return new DifferenceInstruction(DifferenceOperation.Inserted,
-                            new SubSequence(0, lastRightIndex, 0, right.Count - lastRightIndex));
+                            new SubSequence(lastLeftIndex, lastRightIndex, 0, right.Count - lastRightIndex));
             }
         }
 
