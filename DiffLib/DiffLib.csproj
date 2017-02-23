@@ -43,7 +43,6 @@
     <Compile Include="ISequenceMatcher.cs" />
     <Compile Include="PatienceSequenceMatcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SubList.cs" />
     <Compile Include="SubSequence.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

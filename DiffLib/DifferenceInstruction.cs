@@ -15,12 +15,12 @@ namespace DiffLib
         /// Gets the operation that should be performed to turn the left data
         /// into the right data.
         /// </summary>
-        public readonly DifferenceOperation Operation;
+        public DifferenceOperation Operation { get; }
 
         /// <summary>
         /// Get the sub sequence that contains the data the instruction applies to.
         /// </summary>
-        public readonly SubSequence SubSequence;
+        public SubSequence SubSequence { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DifferenceInstruction" /> struct.
@@ -42,7 +42,10 @@ namespace DiffLib
         /// </returns>
         public override int GetHashCode()
         {
-            return ((int)Operation) ^ SubSequence.GetHashCode();
+            var hash = 17;
+            hash = hash * 23 + (int)Operation;
+            hash = hash * 23 + SubSequence.GetHashCode();
+            return hash;
         }
 
         /// <summary>
@@ -52,11 +55,7 @@ namespace DiffLib
         /// <returns>
         ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
-        {
-            if (!(obj is DifferenceInstruction)) return false;
-            return Equals((DifferenceInstruction)obj);
-        }
+        public override bool Equals(object obj) => obj is DifferenceInstruction && Equals((DifferenceInstruction)obj);
 
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -65,10 +64,8 @@ namespace DiffLib
         /// <returns>
         /// true if the current object is equal to the other parameter; otherwise, false.
         /// </returns>
-        public bool Equals(DifferenceInstruction other)
-        {
-            return Operation == other.Operation && SubSequence.Equals(other.SubSequence);
-        }
+        public bool Equals(DifferenceInstruction other) =>
+            Operation == other.Operation && SubSequence.Equals(other.SubSequence);
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
@@ -76,10 +73,7 @@ namespace DiffLib
         /// <returns>
         /// A <see cref="System.String" /> that represents this instance.
         /// </returns>
-        public override string ToString()
-        {
-            return ToString("S", null);
-        }
+        public override string ToString() => ToString("S", null);
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.

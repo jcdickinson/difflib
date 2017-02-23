@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DiffLib
 {
@@ -14,22 +10,22 @@ namespace DiffLib
         /// <summary>
         /// Gets the starting index in the left-hand sequence.
         /// </summary>
-        public readonly int LeftIndex;
+        public int LeftIndex { get; }
 
         /// <summary>
         /// Gets the starting index in the right-hand sequence.
         /// </summary>
-        public readonly int RightIndex;
+        public int RightIndex { get; }
 
         /// <summary>
         /// Gets the number of matched items in the left-hand sequence.
         /// </summary>
-        public readonly int LeftLength;
+        public int LeftLength { get; }
 
         /// <summary>
         /// Gets the number of matched items in the right-hand sequence.
         /// </summary>
-        public readonly int RightLength;
+        public int RightLength { get; }
 
         /// <summary>
         /// Gets the ending index in the left-hand sequence.
@@ -37,13 +33,7 @@ namespace DiffLib
         /// <value>
         /// The ending index in the left-hand sequence.
         /// </value>
-        public int LeftEndIndex
-        {
-            get
-            {
-                return LeftIndex + LeftLength - 1;
-            }
-        }
+        public int LeftEndIndex => LeftIndex + LeftLength - 1;
 
         /// <summary>
         /// Gets the ending index in the right-hand sequence.
@@ -51,13 +41,7 @@ namespace DiffLib
         /// <value>
         /// The ending index in the right-hand sequence.
         /// </value>
-        public int RightEndIndex
-        {
-            get
-            {
-                return RightIndex + RightLength - 1;
-            }
-        }
+        public int RightEndIndex => RightIndex + RightLength - 1;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubSequence" /> struct.
@@ -104,7 +88,12 @@ namespace DiffLib
         /// </returns>
         public override int GetHashCode()
         {
-            return (LeftIndex << 5) ^ (RightIndex << 3) ^ (LeftLength << 1) ^ (RightLength);
+            var hash = 17;
+            hash = hash * 23 + LeftIndex;
+            hash = hash * 23 + RightIndex;
+            hash = hash * 23 + LeftLength;
+            hash = hash * 23 + RightLength;
+            return hash;
         }
 
         /// <summary>
@@ -114,12 +103,7 @@ namespace DiffLib
         /// <returns>
         ///   <c>true</c> if the specified <see cref="System.Object" /> is equal to this instance; otherwise, <c>false</c>.
         /// </returns>
-        public override bool Equals(object obj)
-        {
-            if (!(obj is SubSequence))
-                return false;
-            return Equals((SubSequence)obj);
-        }
+        public override bool Equals(object obj) => obj is SubSequence && Equals((SubSequence)obj);
 
         /// <summary>
         /// Indicates whether the current object is equal to another object of the same type.
@@ -128,12 +112,9 @@ namespace DiffLib
         /// <returns>
         /// true if the current object is equal to the other parameter; otherwise, false.
         /// </returns>
-        public bool Equals(SubSequence other)
-        {
-            return 
-                other.LeftLength == LeftLength && other.RightLength == RightLength && 
-                other.LeftIndex == LeftIndex && other.RightIndex == RightIndex;
-        }
+        public bool Equals(SubSequence other) =>
+            other.LeftLength == LeftLength && other.RightLength == RightLength && 
+            other.LeftIndex == LeftIndex && other.RightIndex == RightIndex;
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.
@@ -141,10 +122,7 @@ namespace DiffLib
         /// <returns>
         /// A <see cref="System.String" /> that represents this instance.
         /// </returns>
-        public override string ToString()
-        {
-            return ToString("S", null);
-        }
+        public override string ToString() => ToString("S", null);
 
         /// <summary>
         /// Returns a <see cref="System.String" /> that represents this instance.

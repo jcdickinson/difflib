@@ -18,21 +18,13 @@ namespace DiffLib
     /// </summary>
     public static class DifferenceSimplifiers
     {
-        private static readonly DifferenceSimplifier _mergeInstructions = MergeInstructionsImpl;
-
         /// <summary>
         /// Gets the merge instructions.
         /// </summary>
         /// <value>
         /// The merge instructions.
         /// </value>
-        public static DifferenceSimplifier MergeInstructions
-        {
-            get
-            {
-                return _mergeInstructions;
-            }
-        }
+        public static DifferenceSimplifier MergeInstructions { get; } = MergeInstructionsImpl;
 
         /// <summary>
         /// Combines a list of <see cref="DifferenceSimplifier"/> delegates into a single one.
