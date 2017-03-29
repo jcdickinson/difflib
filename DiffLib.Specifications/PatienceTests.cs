@@ -15,8 +15,8 @@ namespace DiffLib.Specifications
             return Differ.FindDifferences(left, right).ToArray();
         }
 
-        [Fact(DisplayName = "When diffing a file that adds a new line")]
-        public void When_diffing_a_file_that_adds_a_new_line()
+        [Fact(DisplayName = "PatienceDiff FindMatchingBlocks - Add new line")]
+        public void PatienceDiff_FindMatchingBlocks_AddNewLine()
         {
             var left = Lines("boo");
             var right = Lines("boo", "");
@@ -27,8 +27,8 @@ namespace DiffLib.Specifications
             Assert.Equal(new DifferenceInstruction(DifferenceOperation.Inserted, new SubSequence(1, 1, 0, 1)), instructions[1]);
         }
 
-        [Fact(DisplayName = "When diffing a file that removes_a new line")]
-        public void When_diffing_a_file_that_removes_a_new_line()
+        [Fact(DisplayName = "PatienceDiff FindMatchingBlocks - Remove new line")]
+        public void PatienceDiff_FindMatchingBlocks_RemoveNewLine()
         {
             var left = Lines("boo", "");
             var right = Lines("boo");
@@ -39,8 +39,8 @@ namespace DiffLib.Specifications
             Assert.Equal(new DifferenceInstruction(DifferenceOperation.Removed, new SubSequence(1, 0, 1, 0)), instructions[1]);
         }
 
-        [Fact(DisplayName = "When diffing a file that changes and adds a new line")]
-        public void When_diffing_a_file_that_changes_and_adds_a_new_line()
+        [Fact(DisplayName = "PatienceDiff FindMatchingBlocks - Change and add new line")]
+        public void PatienceDiff_FindMatchingBlocks_ChangeAndNewLine()
         {
             var left = Lines("boo");
             var right = Lines("goo", "");
@@ -51,8 +51,8 @@ namespace DiffLib.Specifications
             Assert.Equal(new DifferenceInstruction(DifferenceOperation.Inserted, new SubSequence(0, 0, 0, 2)), instructions[1]);
         }
 
-        [Fact(DisplayName = "When diffing a file that adds content at the start")]
-        public void When_diffing_a_file_that_adds_content_at_the_start()
+        [Fact(DisplayName = "PatienceDiff FindMatchingBlocks - Add content to start")]
+        public void PatienceDiff_FindMatchingBlocks_AddContentStart()
         {
             var left = Lines(
                 "public  class MyException extends Exception {",
@@ -74,8 +74,8 @@ namespace DiffLib.Specifications
             Assert.Equal(new DifferenceInstruction(DifferenceOperation.Equal, new SubSequence(0, 3, 3, 3)), instructions[1]);
         }
 
-        [Fact(DisplayName = "When diffing a file that removes content at the start")]
-        public void When_diffing_a_file_that_removes_content_at_the_start()
+        [Fact(DisplayName = "PatienceDiff FindMatchingBlocks - Remove content from start")]
+        public void PatienceDiff_FindMatchingBlocks_RemoveContentStart()
         {
             var left = Lines(
                 "/**",
@@ -97,8 +97,8 @@ namespace DiffLib.Specifications
             Assert.Equal(new DifferenceInstruction(DifferenceOperation.Equal, new SubSequence(3, 0, 3, 3)), instructions[1]);
         }
 
-        [Fact(DisplayName = "When diffing a file that removes content at the start and adds to the end")]
-        public void When_diffing_a_file_that_removes_content_at_the_start_and_adds_to_the_end()
+        [Fact(DisplayName = "PatienceDiff FindMatchingBlocks - Remove content from start and add to end")]
+        public void PatienceDiff_FindMatchingBlocks_RemoveContentStartAddEnd()
         {
             var left = Lines(
                 "/**",
@@ -122,6 +122,31 @@ namespace DiffLib.Specifications
             Assert.Equal(new DifferenceInstruction(DifferenceOperation.Removed, new SubSequence(0, 0, 3, 0)), instructions[0]);
             Assert.Equal(new DifferenceInstruction(DifferenceOperation.Equal, new SubSequence(3, 0, 3, 3)), instructions[1]);
             Assert.Equal(new DifferenceInstruction(DifferenceOperation.Inserted, new SubSequence(6, 3, 0, 3)), instructions[2]);
+
+        }
+
+        [Fact(DisplayName = "PatienceDiff FindMatchingBlocks - Add content to middle")]
+        public void PatienceDiff_FindMatchingBlocks_AddContentMid()
+        {
+            var left = Lines(
+                "public  class MyException extends Exception {",
+                "",
+                "}"
+            );
+            var right = Lines(
+                "public  class MyException extends Exception {",
+                "",
+                "/**",
+                " * Simple exception.",
+                " */",
+                "}"
+            );
+            var instructions = Diff(left, right);
+
+            Assert.Equal(3, instructions.Length);
+            Assert.Equal(new DifferenceInstruction(DifferenceOperation.Equal, new SubSequence(0, 0, 2, 2)), instructions[0]);
+            Assert.Equal(new DifferenceInstruction(DifferenceOperation.Inserted, new SubSequence(0, 2, 0, 3)), instructions[1]);
+            Assert.Equal(new DifferenceInstruction(DifferenceOperation.Equal, new SubSequence(2, 5, 1, 1)), instructions[2]);
 
         }
     }

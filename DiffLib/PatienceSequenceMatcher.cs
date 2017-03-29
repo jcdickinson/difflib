@@ -85,7 +85,7 @@ namespace DiffLib
         /// </returns>
         private IEnumerable<Pair> UniqueLcs(IList<T> a, IList<T> b, int aLow, int bLow, int aHigh, int bHigh)
         {
-            var index = new Dictionary<T, NullablePair>(_equality);
+            var index = new Dictionary<T, NullablePair>(a.Count, _equality);
             var act = aHigh - aLow;
             var bct = bHigh - bLow;
 
@@ -110,8 +110,7 @@ namespace DiffLib
             {
                 var line = b[bLow + i];
 
-                NullablePair next;
-                if (index.TryGetValue(line, out next) && next.A.HasValue)
+                if (index.TryGetValue(line, out var next) && next.A.HasValue)
                 {
                     if (next.B.HasValue)
                     {
@@ -152,17 +151,7 @@ namespace DiffLib
 
                 // find the location of the stack
                 else
-                {
-                    k = 0;
-                    for (var i = 0; i < stacksAndLasts.Count; i++)
-                    {
-                        if (stacksAndLasts[i].A > apos)
-                        {
-                            k = i;
-                            break;
-                        }
-                    }
-                }
+                    k = BinarySearch(stacksAndLasts, apos.Value);
 
                 if (k > 0)
                     backpointers[bpos] = stacksAndLasts[k - 1].B;
@@ -176,16 +165,41 @@ namespace DiffLib
             if (stacksAndLasts.Count == 0) return Enumerable.Empty<Pair>();
 
             var j = new int?(stacksAndLasts[stacksAndLasts.Count - 1].B);
-            var result = new List<Pair>();
+
+            // Re-using the StacksAndLasts list for results - it has the correct length and type.
+            k = stacksAndLasts.Count;
 
             while (j.HasValue)
             {
-                result.Add(new Pair(btoa[j.Value].Value, j.Value));
+                stacksAndLasts[--k] = new Pair(btoa[j.Value].Value, j.Value);
                 j = backpointers[j.Value];
             }
-            result.Reverse();
 
-            return result;
+            return stacksAndLasts;
+        }
+
+        /// <summary>
+        /// Performs a binary search for the first <see cref="Pair.A"/> that is larger
+        /// than the specified value.
+        /// </summary>
+        /// <param name="pairs">The list of pairs to search.</param>
+        /// <param name="search">The value to search for.</param>
+        /// <returns>The index of the value or <c>0</c> if it was not found.</returns>
+        private static int BinarySearch(List<Pair> pairs, int search)
+        {
+            var left = -1;
+            var right = pairs.Count;
+
+            while (left + 1 < right)
+            {
+                var middle = (left + right) / 2;
+                if (pairs[middle].A > search)
+                    right = middle;
+                else
+                    left = middle;
+            }
+
+            return left == -1 ? 0 : left;
         }
 
         /// <summary>
