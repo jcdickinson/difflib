@@ -45,7 +45,7 @@ namespace DiffLib
         /// <exception cref="System.ArgumentNullException"><paramref name="simplifiers"/> is <c>null</c>.</exception>
         public static DifferenceSimplifier Combine(IEnumerable<DifferenceSimplifier> simplifiers)
         {
-            if (simplifiers == null) throw new ArgumentNullException("simplifiers");
+            if (simplifiers == null) throw new ArgumentNullException(nameof(simplifiers));
 
             DifferenceSimplifier current = null;
             foreach (var item in simplifiers)

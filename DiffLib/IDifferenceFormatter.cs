@@ -39,10 +39,10 @@ namespace DiffLib
         public static string Format<T>(this IDifferenceFormatter<T> formatter, IList<T> left, IList<T> right, IEnumerable<DifferenceInstruction> instructions)
         {
             if (formatter == null) throw new ArgumentNullException("formatter");
-            using (var stringwriter = new StringWriter())
+            using (var sw = new StringWriter())
             {
-                formatter.Format(left, right, instructions, stringwriter);
-                return stringwriter.ToString();
+                formatter.Format(left, right, instructions, sw);
+                return sw.ToString();
             }
         }
     }

@@ -45,7 +45,7 @@ namespace DiffLib
         /// <param name="name">The name of the sequence matcher.</param>
         public SequenceMatcherAttribute(string name)
         {
-            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException("name");
+            if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name));
             Name = name;
         }
     }

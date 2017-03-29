@@ -308,8 +308,8 @@ namespace DiffLib
         /// </returns>
         public IEnumerable<SubSequence> FindMatchingBlocks(IList<T> left, IList<T> right)
         {
-            if (left == null) throw new ArgumentNullException("left");
-            if (right == null) throw new ArgumentNullException("right");
+            if (left == null) throw new ArgumentNullException(nameof(left));
+            if (right == null) throw new ArgumentNullException(nameof(right));
 
             var matches = RecurseMatches(left, right, 0, 0, left.Count, right.Count, 10);
             return CollapseSequences(matches);

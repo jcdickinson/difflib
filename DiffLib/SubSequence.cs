@@ -51,9 +51,9 @@ namespace DiffLib
         /// <param name="length">The number of matched items in both sequences.</param>
         public SubSequence(int leftIndex, int rightIndex, int commonLength)
         {
-            if (leftIndex < 0) throw new ArgumentOutOfRangeException("leftIndex");
-            if (rightIndex < 0) throw new ArgumentOutOfRangeException("rightIndex");
-            if (commonLength < 0) throw new ArgumentOutOfRangeException("commonLength");
+            if (leftIndex < 0) throw new ArgumentOutOfRangeException(nameof(leftIndex));
+            if (rightIndex < 0) throw new ArgumentOutOfRangeException(nameof(rightIndex));
+            if (commonLength < 0) throw new ArgumentOutOfRangeException(nameof(commonLength));
 
             LeftIndex = leftIndex;
             RightIndex = rightIndex;
@@ -69,10 +69,10 @@ namespace DiffLib
         /// <param name="rightLength">The number of matched items in the right-hand sequence.</param>
         public SubSequence(int leftIndex, int rightIndex, int leftLength, int rightLength)
         {
-            if (leftIndex < 0) throw new ArgumentOutOfRangeException("leftIndex");
-            if (rightIndex < 0) throw new ArgumentOutOfRangeException("rightIndex");
-            if (leftLength < 0) throw new ArgumentOutOfRangeException("leftLength");
-            if (rightLength < 0) throw new ArgumentOutOfRangeException("rightLength");
+            if (leftIndex < 0) throw new ArgumentOutOfRangeException(nameof(leftIndex));
+            if (rightIndex < 0) throw new ArgumentOutOfRangeException(nameof(rightIndex));
+            if (leftLength < 0) throw new ArgumentOutOfRangeException(nameof(leftLength));
+            if (rightLength < 0) throw new ArgumentOutOfRangeException(nameof(rightLength));
 
             LeftIndex = leftIndex;
             RightIndex = rightIndex;

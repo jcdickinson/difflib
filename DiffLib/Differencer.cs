@@ -22,8 +22,7 @@ namespace DiffLib
         /// <param name="sequenceMatcher">The sequence matcher to use to find longest common subsequences.</param>
         public Differencer(ISequenceMatcher<T> sequenceMatcher)
         {
-            if (sequenceMatcher == null) throw new ArgumentNullException("sequenceMatcher");
-            _sequenceMatcher = sequenceMatcher;
+            _sequenceMatcher = sequenceMatcher ?? throw new ArgumentNullException(nameof(sequenceMatcher));
         }
 
         /// <summary>
@@ -33,7 +32,7 @@ namespace DiffLib
         /// <returns><c>this</c> instance.</returns>
         public Differencer<T> AddSimplifier(DifferenceSimplifier simplifier)
         {
-            if (simplifier == null) throw new ArgumentNullException("simplifier");
+            if (simplifier == null) throw new ArgumentNullException(nameof(simplifier));
             if (_simplifier == null) _simplifier = simplifier;
             else _simplifier = DifferenceSimplifiers.Combine(_simplifier, simplifier);
             return this;
@@ -50,8 +49,8 @@ namespace DiffLib
         /// </returns>
         public IEnumerable<DifferenceInstruction> FindDifferences(IList<T> left, IList<T> right)
         {
-            if (left == null) throw new ArgumentNullException("left");
-            if (right == null) throw new ArgumentNullException("right");
+            if (left == null) throw new ArgumentNullException(nameof(left));
+            if (right == null) throw new ArgumentNullException(nameof(right));
 
             var matches = _sequenceMatcher.FindMatchingBlocks(left, right);
 
